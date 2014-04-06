@@ -26,6 +26,20 @@ ISR( TIMER1_COMPA_vect ) {
 	PORTD |= _BV(DIGIT_OFFSET) << cur_digit;
 }
 
+#define SERIAL_COMMAND 0xFF
+
+uint8_t serial_digit = SERIAL_COMMAND;
+
+ISR( USART_RX_vect  ) {
+	if (serial_digit == SERIAL_COMMAND) {
+		serial_digit = UDR & 0x0F;
+		if (serial_digit >= NUM_DIGITS) serial_digit = 0;
+	} else {
+		framebuf[serial_digit] = UDR;
+		serial_digit = SERIAL_COMMAND;
+	}
+}
+
 int main(void) {
 
 	DDRB = 0xFF;
@@ -35,6 +49,11 @@ int main(void) {
 		framebuf[digit] = 0xFF;
 		DIGIT_MASK &= ~(_BV(DIGIT_OFFSET) << digit);
 	}
+
+	const uint16_t brr = F_CPU / 16 / 9600 - 1;
+	UBRRL = brr & 0xFF;
+	UBRRH = brr >> 8;
+	UCSRB |= _BV(RXEN) | _BV(RXCIE);
 
 	TCCR1B = (1 << WGM12) | TIMER1_PRESCALE_1;
 	OCR1A = (uint16_t)5000;
