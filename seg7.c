@@ -61,12 +61,5 @@ int main(void) {
 	TIMSK |= 1 << OCIE1A;   // Output Compare Interrupt Enable (timer 1, OCR1A)
 	sei();                 // Set Enable Interrupts
 
-	while (1) {
-		for (uint8_t digit = 0; digit < 3; digit++) {
-			for (uint8_t segment = 1; segment; segment <<= 1) {
-				framebuf[digit] ^= segment;
-				_delay_ms(20);
-			}
-		}
-	}
+	while (1);
 }
