@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from __future__ import with_statement
+from __future__ import with_statement, print_function
 from os import mkfifo, remove
 from blessings import Terminal
 
@@ -51,7 +51,7 @@ def dump(framebuf):
             mapper = T.red if (1 << offset) & digit else T.bold_yellow
             for x, y, element in elements:
                 with T.location(x + n * DIGIT_WIDTH, y):
-                    print mapper(element)
+                    print(mapper(element))
 
 if __name__ == '__main__':
     simulator(DEFAULT_FILENAME)
