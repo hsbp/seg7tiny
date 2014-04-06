@@ -39,7 +39,7 @@ int main(void) {
 	TCCR1B = (1 << WGM12) | TIMER1_PRESCALE_1;
 	OCR1A = (uint16_t)5000;
 
-	TIMSK |= 1 << OCIE1A;   // Output Compare Interrupt Enable (timer 1, OCR1A) 
+	TIMSK |= 1 << OCIE1A;   // Output Compare Interrupt Enable (timer 1, OCR1A)
 	sei();                 // Set Enable Interrupts
 
 	while (1) {
