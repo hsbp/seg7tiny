@@ -23,7 +23,7 @@ ISR( TIMER1_COMPA_vect ) {
 	if (cur_digit++ >= NUM_DIGITS) cur_digit = 0;
 	PORTD &= DIGIT_MASK;
 	PORTB = framebuf[cur_digit];
-	PORTD |= (1 << DIGIT_OFFSET) << cur_digit;
+	PORTD |= _BV(DIGIT_OFFSET) << cur_digit;
 }
 
 int main(void) {
