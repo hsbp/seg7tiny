@@ -1,3 +1,4 @@
 .map
 seg7.lst
 rpi
+simulator.fifo
