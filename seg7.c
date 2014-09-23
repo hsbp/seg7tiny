@@ -50,7 +50,7 @@ int main(void) {
 		DIGIT_MASK &= ~(_BV(DIGIT_OFFSET) << digit);
 	}
 
-	const uint16_t brr = F_CPU / 16 / 9600 - 1;
+	const uint16_t brr = F_CPU / 16 / 1200 - 1;
 	UBRRL = brr & 0xFF;
 	UBRRH = brr >> 8;
 	UCSRB |= _BV(RXEN) | _BV(RXCIE);
