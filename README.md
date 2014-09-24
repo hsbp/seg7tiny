@@ -19,6 +19,9 @@ Two variables can be configured
  - `PIN` is the number of the pin used for serial data (UART)
  - `BITLEN` is the length of a bit in microseconds (733 works for 1200 bps)
 
+These variables should be put into the appropriate `-D` parameters, and the
+commands below produce an executable called `rpi` that can be ran as an
+unprivileged user (the permissions are set to SUID root).
 
 	gcc rpi.c -o rpi -O3 -DPIN=... -DBITLEN=... -funroll-loops
 	sudo chown root:root rpi
