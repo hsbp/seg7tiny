@@ -8,5 +8,5 @@ import json
 
 prices = json.load(urlopen("https://api.bitcoinaverage.com/ticker/EUR"))
 eur24 = 2 / float(prices["24h_avg"])
-port = Serial('/dev/ttyUSB0', 9600)
+port = Serial('/dev/ttyUSB0', 1200)
 print_number(str(eur24 * 1000)[:4], port.write)
