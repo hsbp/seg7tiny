@@ -30,7 +30,10 @@ SEGMAP = {
 def print_number(numstr, writer):
     for digit, match in enumerate(re.finditer(r'(\d)(\.?)', numstr)):
         segments = SEGMAP[match.group(1)] | SEGMAP[match.group(2)]
-        writer(chr(digit) + chr(0xFF ^ segments))
+        segdata = 0xFF ^ segments
+        # bits for digit = xyz and segments = abcdefgh: 1xyzabcd 0000efgh
+        writer(chr(0x80 | (digit << 4) | (segdata >> 4)) +
+                chr(segdata & 0x0F))
 
 if __name__ == '__main__':
     from simulator import DEFAULT_FILENAME

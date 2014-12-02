@@ -17,7 +17,7 @@ SEGMENTS = { # change numbers before ':' according to your wiring
         }
 DIGIT_WIDTH = 10
 NUM_DIGITS = 3
-SERIAL_COMMAND = 0xFF
+SERIAL_COMMAND = None
 
 T = Terminal()
 
@@ -34,12 +34,11 @@ def simulator(filename):
                     if not chunk:
                         break
                     byte = ord(chunk)
-                    if serial_digit == SERIAL_COMMAND:
-                        serial_digit = byte & 0x0F
-                        if serial_digit >= NUM_DIGITS:
-                            serial_digit = 0
-                    else:
-                        framebuf[serial_digit] = byte
+                    if byte & 0x80:
+                        serial_digit = byte
+                    elif serial_digit is not SERIAL_COMMAND:
+                        digit = (serial_digit & 0x70) >> 4
+                        framebuf[digit] = (serial_digit << 4) | byte
                         serial_digit = SERIAL_COMMAND
                         dump(framebuf)
     finally:

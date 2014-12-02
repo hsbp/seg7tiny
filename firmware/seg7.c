@@ -26,16 +26,20 @@ ISR( TIMER1_COMPA_vect ) {
 	PORTD |= _BV(DIGIT_OFFSET) << cur_digit;
 }
 
-#define SERIAL_COMMAND 0xFF
+#define SERIAL_COMMAND 0
+#define SERIAL_CMD_FLAG 0x80
 
 uint8_t serial_digit = SERIAL_COMMAND;
 
 ISR( USART_RX_vect  ) {
-	if (serial_digit == SERIAL_COMMAND) {
-		serial_digit = UDR & 0x0F;
-		if (serial_digit >= NUM_DIGITS) serial_digit = 0;
-	} else {
-		framebuf[serial_digit] = UDR;
+	uint8_t incoming = UDR;
+	if (incoming & SERIAL_CMD_FLAG) {
+		serial_digit = incoming;
+	} else if (serial_digit != SERIAL_COMMAND) {
+		uint8_t digit = (serial_digit & 0x70) >> 4;
+		if (digit >= NUM_DIGITS) digit = 0;
+
+		framebuf[digit] = (serial_digit << 4) | incoming;
 		serial_digit = SERIAL_COMMAND;
 	}
 }
